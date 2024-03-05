@@ -14,7 +14,7 @@ public class IngestRestProcessor extends AbstractProcessor {
     private final String field;
     private final String targetField;
 
-    public IngestRestProcessor(String tag, String field, String description,
+    public IngestRestProcessor(String tag, String description, String field, 
         String targetField) throws IOException {
         super(tag, description);
         this.field = field;
@@ -23,10 +23,13 @@ public class IngestRestProcessor extends AbstractProcessor {
 
     @Override
     public IngestDocument execute(IngestDocument ingestDocument) throws Exception {
-        String content = ingestDocument.getFieldValue(field, String.class);
-        ingestDocument.setFieldValue(targetField, content);
-        // implement the processor logic here
-        return ingestDocument;
+        IngestDocument document = ingestDocument;
+        if (document.hasField(field)) {
+            String value = document.getFieldValue(field, String.class);
+            document.setFieldValue(targetField, value);
+            // implement the processor logic here
+            }
+        return document;
     }
 
     @Override
@@ -38,9 +41,9 @@ public class IngestRestProcessor extends AbstractProcessor {
         @Override
         public Processor create(Map<String, Processor.Factory> registry, 
             String processorTag, String description, Map<String, Object> config) throws IOException {
-                String field = ConfigurationUtils.readStringProperty(TYPE, processorTag, config, "field", 
+            String field = ConfigurationUtils.readStringProperty(TYPE, processorTag, config, "field", 
                     "default_field_name");
-                String targetField = ConfigurationUtils.readStringProperty(TYPE, processorTag, config, "target_field", 
+            String targetField = ConfigurationUtils.readStringProperty(TYPE, processorTag, config, "target_field", 
                     "default_target_field_name");
     
             return new IngestRestProcessor(processorTag, description, field, targetField);
