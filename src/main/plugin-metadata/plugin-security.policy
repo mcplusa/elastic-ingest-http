@@ -7,6 +7,7 @@
  */
 
 grant {
-  // azure client opens socket connections for discovery
+  
   permission java.net.SocketPermission "*", "connect,resolve";
+  permission java.net.SocketPermission "control-plane-gateway-44gp1iu3.uc.gateway.dev:443", "connect,resolve";
 };
