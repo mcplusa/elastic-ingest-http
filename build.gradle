@@ -1,0 +1,77 @@
+ext.pluginApiVersion = '8.12.2'
+ext.luceneVersion = '9.9.2'
+
+buildscript {
+  ext.pluginApiVersion = '8.12.2'
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath "org.elasticsearch.gradle:build-tools:${pluginApiVersion}"
+  }
+}
+
+apply plugin: 'elasticsearch.esplugin'
+apply plugin: 'elasticsearch.yaml-rest-test'
+apply plugin: 'java'
+
+java {
+    sourceCompatibility = 17
+    targetCompatibility = 17
+}
+
+esplugin {
+  name 'ingest_rest'
+  description 'Consume REST in Ingest Plugin'
+  classname 'org.elasticsearch.plugin.ingest.rest.IngestRestPlugin'
+  licenseFile rootProject.file('SSPL-1.0+ELASTIC-LICENSE-2.0.txt')
+  noticeFile rootProject.file('NOTICE.txt')
+}
+
+tasks.build {
+  manifest {
+    attributes(
+      'Implementation-Title': 'Ingest REST Plugin',
+      'Implementation-Version': version,
+      'Implementation-Vendor': 'Elasticsearch',
+      'Implementation-Vendor-Id': 'org.elasticsearch',
+      'Implementation-URL': 'https://www.elastic.co',
+      'Short-Name': 'ingest_rest',
+      'Long-Name': 'Ingest REST Plugin',
+      'Description': 'Consume REST in Ingest Plugin',
+      'License': 'SSPL-1.0+ELASTIC-LICENSE-2.0',
+      'License-URL': 'https://www.elastic.co/licensing/elastic-license',
+      'Elasticsearch-Plugin-Class': 'org.elasticsearch.plugin.ingest.rest.IngestRestPlugin',
+      'Elasticsearch-Plugin-Version': version
+    )
+  }
+}
+
+group 'org.elasticsearch.plugin.ingest.rest'
+version '8.12.2'
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+}
+
+dependencies {
+
+  //TODO transitive dependency off and plugin-api dependency?
+  compileOnly "org.elasticsearch.plugin:elasticsearch-plugin-api:${pluginApiVersion}"
+  compileOnly "org.elasticsearch.plugin:elasticsearch-plugin-analysis-api:${pluginApiVersion}"
+  compileOnly "org.apache.lucene:lucene-analysis-common:${luceneVersion}"
+  compileOnly "org.elasticsearch:elasticsearch:${pluginApiVersion}"
+
+  //TODO for testing this also have to be declared
+  testImplementation "org.elasticsearch.plugin:elasticsearch-plugin-api:${pluginApiVersion}"
+  testImplementation "org.elasticsearch.plugin:elasticsearch-plugin-analysis-api:${pluginApiVersion}"
+  testImplementation "org.apache.lucene:lucene-analysis-common:${luceneVersion}"
+
+  testImplementation ('junit:junit:4.13.2'){
+    exclude group: 'org.hamcrest'
+  }
+  testImplementation 'org.mockito:mockito-core:4.4.0'
+  testImplementation 'org.hamcrest:hamcrest:2.2'
+
+}
