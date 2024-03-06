@@ -7,8 +7,7 @@
     "stability":"stable",
     "visibility":"public",
     "headers":{
-      "accept": [ "application/json"],
-      "content_type": ["application/json"]
+      "accept": [ "application/json"]
     },
     "url":{
       "paths":[
@@ -56,9 +55,6 @@
         "description": "Specific the time to live for the point in time",
         "required": true
       }
-    },
-    "body":{
-      "description":"An index_filter specified with the Query DSL"
     }
   }
 }

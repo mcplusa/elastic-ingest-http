@@ -62,6 +62,8 @@ dependencies {
     implementation group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.14'
     implementation group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.13'
 
+    compileOnly "org.elasticsearch:elasticsearch:${pluginApiVersion}"
+
   //TODO transitive dependency off and plugin-api dependency?
   compileOnly "org.elasticsearch.plugin:elasticsearch-plugin-api:${pluginApiVersion}"
   compileOnly "org.elasticsearch.plugin:elasticsearch-plugin-analysis-api:${pluginApiVersion}"

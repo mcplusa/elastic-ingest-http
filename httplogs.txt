@@ -1,0 +1,12 @@
+äôÆë¼tV<AZoEM*@?(ùÀ¨jØï$8£Pr>HÀN'öÅÇ
+5Ð4øD¶.POST /mcplusa/models/predict HTTP/1.1
+model_id: 7e009044-17cd-4132-b43f-cfd5cc5c61fd
+task: named_entity_recognition
+Authorization: Basic bWljaGFlbC5jaXptYXJAbWNwbHVzYS5jb206bWljaGFlbA==
+Content-Type: application/json
+User-Agent: Java/21.0.2
+Host: control-plane-gateway-44gp1iu3.uc.gateway.dev
+Accept: */*
+Connection: keep-alive
+Content-Length: 10
+

@@ -1,0 +1,69 @@
+GET _cat/plugins
+GET _nodes/plugins
+GET _nodes/ingest?filter_path=nodes.*.ingest.processors
+
+PUT _ingest/pipeline/my-pipeline
+{
+  "description": "My optional pipeline description",
+  "processors": [
+    {
+      "ingest_rest": {
+        "field": "foo",
+        "target_field": "bar",
+        "model_id": "7e009044-17cd-4132-b43f-cfd5cc5c61fd",
+        "task": "named_entity_recognition",
+        "authorization":"Basic bWljaGFlbC5jaXptYXJAbWNwbHVzYS5jb206bWljaGFlbA==",
+        "content_type":"application/json",
+        "method": "POST"
+
+      }
+    }
+  ]
+}
+
+GET _ingest/pipeline
+
+DELETE /my_index
+
+PUT /my_index
+{
+  "mappings": {
+    "properties": {
+      "foo": {
+        "type": "text"
+      },
+      "bar": {
+        "type": "text"
+      }
+    }
+  }
+}
+POST /my_index/_doc?pipeline=my-pipeline
+{
+  "foo": "hello",
+  "bar": "test"
+}
+
+GET /my_index/_search
+
+POST _ingest/pipeline/_simulate
+{
+  "pipeline": {
+    "description": "My pipeline",
+    "processors": [
+      {
+        "ingest_rest": {
+          "field": "foo",
+          "target_field": "bar"
+        }
+      }
+    ]
+  },
+  "docs": [
+    {
+      "_source": {
+        "foo": "your_value"
+      }
+    }
+  ]
+}
