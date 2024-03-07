@@ -82,12 +82,10 @@ public class IngestRestProcessor extends AbstractProcessor {
                                 "model_id", this.model_id,
                                 "task", this.task
                         );
-                        String url = this.endpoint + "?model_id=" + this.model_id + "&task=" + this.task;
-                        String response = MakeRestCall(url, this.method, jsonString, this.authorization,
+                        //String url = this.endpoint + "?model_id=" + this.model_id + "&task=" + this.task;
+                        String response = MakeRestCall(endpoint, this.method, value, this.authorization,
                                         this.content_type, parameters);
-                                        document.setFieldValue(field, jsonString);
                                         document.setFieldValue(targetField, response);
-                                        // implement the processor logic here
                 }
                 return document;
         }
@@ -132,12 +130,5 @@ public class IngestRestProcessor extends AbstractProcessor {
                                         content_type, endpoint, method);
                 }
         }
-
-        /*
-         * Headers should be in format of JSON string. For example:
-         * headers: '{"Authorization":
-         * "Basic bWljaGFlbC5jaXptYXJAbWNwbHVzYS5jb206bWljaGFlbA==",
-         * "Content-Type": "application/json"}'
-         */
 
 }

@@ -77,6 +77,13 @@ class HttpClient {
             String body, Map<String,String> parameters) throws IOException {
         return doPrivileged(() -> {
             String url = urlToGet;
+            for (Map.Entry<String, String> entry : parameters.entrySet()) {
+                if (url.contains("?")) {
+                    url += "&" + entry.getKey() + "=" + entry.getValue();
+                } else {
+                    url += "?" + entry.getKey() + "=" + entry.getValue();
+                }
+            }
              // Write the JSON data to the output stream
             byte[] postData = body.getBytes(StandardCharsets.UTF_8);
             HttpURLConnection conn = createConnection(url, method, authorization, content_type, parameters);
