@@ -12,7 +12,6 @@ PUT _ingest/pipeline/my-pipeline
         "target_field": "bar",
         "model_id": "7e009044-17cd-4132-b43f-cfd5cc5c61fd",
         "task": "named_entity_recognition",
-        "authorization":"Basic bWljaGFlbC5jaXptYXJAbWNwbHVzYS5jb206bWljaGFlbA==",
         "content_type":"application/json",
         "method": "POST"
 

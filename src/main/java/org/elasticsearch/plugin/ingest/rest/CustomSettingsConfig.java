@@ -69,7 +69,7 @@ public class CustomSettingsConfig {
         final Path configDir = environment.configFile();
 
         // Resolve the plugin's custom settings file
-        final Path customSettingsYamlFile = configDir.resolve("custom-settings/custom.yml");
+        final Path customSettingsYamlFile = configDir.resolve("ingest_rest/custom.yml");
 
         // Load the settings from the plugin's custom settings file
         final Settings customSettings;

@@ -25,7 +25,6 @@ import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static java.net.HttpURLConnection.HTTP_SEE_OTHER;
 
-
 @SuppressWarnings("removal")
 class HttpClient {
 
@@ -50,7 +49,7 @@ class HttpClient {
                         }
                         String location = conn.getHeaderField("Location");
                         URL base = new URL(url);
-                        URL next = new URL(base, location);  // Deal with relative URLs
+                        URL next = new URL(base, location); // Deal with relative URLs
                         url = next.toExternalForm();
                         conn = createConnection(url);
                         break;
@@ -58,23 +57,23 @@ class HttpClient {
                         throw new ResourceNotFoundException("{} not found", urlToGet);
                     default:
                         int responseCode = conn.getResponseCode();
-                        throw new ElasticsearchStatusException("error during downloading {}", RestStatus.fromCode(responseCode), urlToGet);
+                        throw new ElasticsearchStatusException("error during downloading {}",
+                                RestStatus.fromCode(responseCode), urlToGet);
                 }
             }
         });
     }
 
-
-     public static InputStream stringToInputStream(String input) {
+    public static InputStream stringToInputStream(String input) {
         // Convert the string to a byte array
         byte[] bytes = input.getBytes();
         // Create an InputStream from the byte array
         InputStream inputStream = new ByteArrayInputStream(bytes);
         return inputStream;
     }
-    
-    InputStream post(String urlToGet, String method, String authorization, String content_type, 
-            String body, Map<String,String> parameters) throws IOException {
+
+    InputStream post(String urlToGet, String method, String authorization, String content_type,
+            String body, Map<String, String> parameters) throws IOException {
         return doPrivileged(() -> {
             String url = urlToGet;
             for (Map.Entry<String, String> entry : parameters.entrySet()) {
@@ -84,7 +83,7 @@ class HttpClient {
                     url += "?" + entry.getKey() + "=" + entry.getValue();
                 }
             }
-             // Write the JSON data to the output stream
+            // Write the JSON data to the output stream
             byte[] postData = body.getBytes(StandardCharsets.UTF_8);
             HttpURLConnection conn = createConnection(url, method, authorization, content_type, parameters);
             conn.getOutputStream().write(postData);
@@ -98,22 +97,19 @@ class HttpClient {
                     case HTTP_SEE_OTHER:
                         if (redirectsCount++ > 50) {
                             return new BufferedInputStream(stringToInputStream("too many redirects"));
-                            //throw new IllegalStateException("too many redirects connection to [" + urlToGet + "]");
+                            // throw new IllegalStateException("too many redirects connection to [" +
+                            // urlToGet + "]");
                         }
-/*                        String location = conn.getHeaderField("Location");
-                        URL base = new URL(url);
-                        URL next = new URL(base, location);  // Deal with relative URLs
-                        url = next.toExternalForm();
-                        conn = createConnection(url);
-*/
                         break;
                     case HTTP_NOT_FOUND:
                         return new BufferedInputStream(stringToInputStream("url not found"));
-                        //throw new ResourceNotFoundException("{} not found", urlToGet);
+                    // throw new ResourceNotFoundException("{} not found", urlToGet);
                     default:
                         int responseCode = conn.getResponseCode();
-                        return new BufferedInputStream(stringToInputStream("error during downloading {} " + responseCode + " " + conn.getResponseMessage()));
-                        //throw new ElasticsearchStatusException("error during downloading {}", RestStatus.fromCode(responseCode), urlToGet);
+                        return new BufferedInputStream(stringToInputStream(
+                                "error during downloading " + responseCode + " " + conn.getResponseMessage()));
+                    // throw new ElasticsearchStatusException("error during downloading {}",
+                    // RestStatus.fromCode(responseCode), urlToGet);
 
                 }
             }
@@ -134,8 +130,8 @@ class HttpClient {
         return conn;
     }
 
-    private static HttpURLConnection createConnection(String url,String method, String authorization, 
-        String content_type, Map<String,String> parameters) throws IOException {
+    private static HttpURLConnection createConnection(String url, String method, String authorization,
+            String content_type, Map<String, String> parameters) throws IOException {
         HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
         conn.setRequestMethod(method);
         // first parameter has a ? before it, the rest have a & before them

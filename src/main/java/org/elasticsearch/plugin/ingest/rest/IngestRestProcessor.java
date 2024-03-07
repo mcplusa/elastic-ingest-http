@@ -41,19 +41,12 @@ public class IngestRestProcessor extends AbstractProcessor {
                 this.httpClient = new HttpClient();
         }
 
-        String jsonString = "{\n" +
-                        "  \"text\": \"Japanese pitcher and freshly minted Dodgers team member Shohei Ohtani’s decade-long $700 million contract with the team — already a subject of interest in the sports and tax worlds for its structure — has now drawn the ire of California’s controller.\",\n"
-                        +
-                        "  \"question\": \"\",\n" +
-                        "  \"context\": \"\",\n" +
-                        "  \"instruction\": \"Extract entities from the model's output\"\n" +
-                        "}";
-
         private String MakeRestCall(String endpoint, String method, String body, String authorization,
-                        String content_type, Map<String,String> parameters) {
+                        String content_type, Map<String, String> parameters) {
                 StringBuilder response = new StringBuilder();
                 try {
-                        InputStream is = httpClient.post(endpoint, method, authorization, content_type, body, parameters);
+                        InputStream is = httpClient.post(endpoint, method, authorization, content_type, body,
+                                        parameters);
                         // Read the response
                         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
                         response = new StringBuilder();
@@ -78,14 +71,14 @@ public class IngestRestProcessor extends AbstractProcessor {
                 IngestDocument document = ingestDocument;
                 if (document.hasField(field)) {
                         String value = document.getFieldValue(field, String.class);
-                        Map<String,String> parameters = Map.of(
-                                "model_id", this.model_id,
-                                "task", this.task
-                        );
-                        //String url = this.endpoint + "?model_id=" + this.model_id + "&task=" + this.task;
+                        Map<String, String> parameters = Map.of(
+                                        "model_id", this.model_id,
+                                        "task", this.task);
+                        // String url = this.endpoint + "?model_id=" + this.model_id + "&task=" +
+                        // this.task;
                         String response = MakeRestCall(endpoint, this.method, value, this.authorization,
                                         this.content_type, parameters);
-                                        document.setFieldValue(targetField, response);
+                        document.setFieldValue(targetField, response);
                 }
                 return document;
         }
@@ -96,33 +89,39 @@ public class IngestRestProcessor extends AbstractProcessor {
         }
 
         public static final class Factory implements Processor.Factory {
+
+                private String authorization;
+
+                public Factory(String customData) {
+                        this.authorization = customData;
+                }
+
                 @Override
                 public IngestRestProcessor create(Map<String, Processor.Factory> registry,
                                 String processorTag, String description, Map<String, Object> config)
                                 throws IOException {
 
-                        String field = ConfigurationUtils.readStringProperty(TYPE, processorTag, config, 
+                        String field = ConfigurationUtils.readStringProperty(TYPE, processorTag, config,
                                         "field",
                                         "foo");
                         String targetField = ConfigurationUtils.readStringProperty(TYPE, processorTag, config,
                                         "target_field",
                                         "bar");
-                        String model_id = ConfigurationUtils.readStringProperty(TYPE, processorTag, config, 
+                        String model_id = ConfigurationUtils.readStringProperty(TYPE, processorTag, config,
                                         "model_id",
                                         "7e009044-17cd-4132-b43f-cfd5cc5c61fd");
-                        String task = ConfigurationUtils.readStringProperty(TYPE, processorTag, config, 
+                        String task = ConfigurationUtils.readStringProperty(TYPE, processorTag, config,
                                         "task",
                                         "named_entity_recognition");
                         String authorization = ConfigurationUtils.readStringProperty(TYPE, processorTag, config,
-                                        "authorization",
-                                        "Basic bWljaGFlbC5jaXptYXJAbWNwbHVzYS5jb206bWljaGFlbA==");
+                                        "authorization", this.authorization);
                         String content_type = ConfigurationUtils.readStringProperty(TYPE, processorTag, config,
                                         "content_type",
                                         "application/json");
-                        String endpoint = ConfigurationUtils.readStringProperty(TYPE, processorTag, config, 
+                        String endpoint = ConfigurationUtils.readStringProperty(TYPE, processorTag, config,
                                         "endpoint",
                                         "https://control-plane-gateway-44gp1iu3.uc.gateway.dev/mcplusa/models/predict");
-                        String method = ConfigurationUtils.readStringProperty(TYPE, processorTag, config, 
+                        String method = ConfigurationUtils.readStringProperty(TYPE, processorTag, config,
                                         "method",
                                         "POST");
                         return new IngestRestProcessor(processorTag, description, field, targetField, model_id, task,
