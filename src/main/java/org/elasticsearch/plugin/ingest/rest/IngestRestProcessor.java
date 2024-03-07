@@ -82,10 +82,12 @@ public class IngestRestProcessor extends AbstractProcessor {
                                 "model_id", this.model_id,
                                 "task", this.task
                         );
-                        String response = MakeRestCall(this.endpoint, this.method, jsonString, this.authorization,
+                        String url = this.endpoint + "?model_id=" + this.model_id + "&task=" + this.task;
+                        String response = MakeRestCall(url, this.method, jsonString, this.authorization,
                                         this.content_type, parameters);
-                        document.setFieldValue(targetField, response);
-                        // implement the processor logic here
+                                        document.setFieldValue(field, jsonString);
+                                        document.setFieldValue(targetField, response);
+                                        // implement the processor logic here
                 }
                 return document;
         }

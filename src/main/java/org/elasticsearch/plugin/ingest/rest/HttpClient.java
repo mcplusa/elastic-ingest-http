@@ -131,9 +131,14 @@ class HttpClient {
         String content_type, Map<String,String> parameters) throws IOException {
         HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
         conn.setRequestMethod(method);
+        // first parameter has a ? before it, the rest have a & before them
         for (Map.Entry<String, String> entry : parameters.entrySet()) {
-                conn.setRequestProperty(entry.getKey(), entry.getValue());
+            if (url.contains("?")) {
+                url += "&" + entry.getKey() + "=" + entry.getValue();
+            } else {
+                url += "?" + entry.getKey() + "=" + entry.getValue();
             }
+        }
         conn.addRequestProperty("Authorization", authorization);
         conn.addRequestProperty("Content-Type", content_type);
         conn.setConnectTimeout(10000);

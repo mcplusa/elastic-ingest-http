@@ -1,5 +1,7 @@
-äôÆë¼tV<AZoEM*@?(ùÀ¨jØï$8£Pr>HÀN'öÅÇ
-5Ð4øD¶.POST /mcplusa/models/predict HTTP/1.1
+Java
+
+äôÆë¼tV<AZoEÿ@?wÀ¨jØï$8ÍPÇö	wÞèúÖöÅÈ
+6ßû4Û÷POST /mcplusa/models/predict HTTP/1.1
 model_id: 7e009044-17cd-4132-b43f-cfd5cc5c61fd
 task: named_entity_recognition
 Authorization: Basic bWljaGFlbC5jaXptYXJAbWNwbHVzYS5jb206bWljaGFlbA==
@@ -8,5 +10,15 @@ User-Agent: Java/21.0.2
 Host: control-plane-gateway-44gp1iu3.uc.gateway.dev
 Accept: */*
 Connection: keep-alive
-Content-Length: 10
+Content-Length: 370
 
+äôÆë¼tV<AZoE¦ÿ @?v÷À¨jØï$8ÍPÇö
+ßÞèúÖöÅÒ
+6ßû4Û÷{
+  "text": "Japanese pitcher and freshly minted Dodgers team member Shohei Ohtaniâs decade-long $700 million contract with the team â already a subject of interest in the sports and tax worlds for its structure â has now drawn the ire of Californiaâs controller.",
+  "question": "",
+  "context": "",
+  "instruction": "Extract entities from the model's output"
+}
+
+Python
