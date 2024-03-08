@@ -24,11 +24,14 @@ public class IngestRestProcessor extends AbstractProcessor {
         private final String content_type;
         private final String endpoint;
         private final String method;
+        private final Integer read_timeout;
+        private final Integer connect_timeout;
         private final HttpClient httpClient;
 
         public IngestRestProcessor(String processorTag, String description, String field,
                         String targetField, String model_id, String task, String authorization,
-                        String content_type, String endpoint, String method) throws IOException {
+                        String content_type, String endpoint, String method, Integer read_timeout, 
+                        Integer connect_timeout) throws IOException {
                 super(processorTag, description);
                 this.field = field;
                 this.targetField = targetField;
@@ -38,6 +41,8 @@ public class IngestRestProcessor extends AbstractProcessor {
                 this.content_type = content_type;
                 this.endpoint = endpoint;
                 this.method = method;
+                this.read_timeout = read_timeout;
+                this.connect_timeout = connect_timeout;
                 this.httpClient = new HttpClient();
         }
 
@@ -46,7 +51,7 @@ public class IngestRestProcessor extends AbstractProcessor {
                 StringBuilder response = new StringBuilder();
                 try {
                         InputStream is = httpClient.post(endpoint, method, authorization, content_type, body,
-                                        parameters);
+                                        parameters, this.read_timeout, this.connect_timeout);
                         // Read the response
                         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
                         response = new StringBuilder();
@@ -74,8 +79,6 @@ public class IngestRestProcessor extends AbstractProcessor {
                         Map<String, String> parameters = Map.of(
                                         "model_id", this.model_id,
                                         "task", this.task);
-                        // String url = this.endpoint + "?model_id=" + this.model_id + "&task=" +
-                        // this.task;
                         String response = MakeRestCall(endpoint, this.method, value, this.authorization,
                                         this.content_type, parameters);
                         document.setFieldValue(targetField, response);
@@ -124,9 +127,15 @@ public class IngestRestProcessor extends AbstractProcessor {
                         String method = ConfigurationUtils.readStringProperty(TYPE, processorTag, config,
                                         "method",
                                         "POST");
+                        Integer read_timeout = ConfigurationUtils.readIntProperty(TYPE, processorTag, config,
+                                        "read_timeout",
+                                        10000);
+                        Integer connect_timeout = ConfigurationUtils.readIntProperty(TYPE, processorTag, config,
+                                        "connect_timeout",
+                                        10000);
                         return new IngestRestProcessor(processorTag, description, field, targetField, model_id, task,
                                         authorization,
-                                        content_type, endpoint, method);
+                                        content_type, endpoint, method, read_timeout, connect_timeout);
                 }
         }
 

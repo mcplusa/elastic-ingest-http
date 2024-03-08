@@ -73,7 +73,8 @@ class HttpClient {
     }
 
     InputStream post(String urlToGet, String method, String authorization, String content_type,
-            String body, Map<String, String> parameters) throws IOException {
+            String body, Map<String, String> parameters, Integer read_timeout, 
+            Integer connect_timeout) throws IOException {
         return doPrivileged(() -> {
             String url = urlToGet;
             for (Map.Entry<String, String> entry : parameters.entrySet()) {
@@ -85,7 +86,8 @@ class HttpClient {
             }
             // Write the JSON data to the output stream
             byte[] postData = body.getBytes(StandardCharsets.UTF_8);
-            HttpURLConnection conn = createConnection(url, method, authorization, content_type, parameters);
+            HttpURLConnection conn = createConnection(url, method, authorization, content_type, 
+                    parameters, read_timeout, connect_timeout);
             conn.getOutputStream().write(postData);
             int redirectsCount = 0;
             while (true) {
@@ -131,7 +133,8 @@ class HttpClient {
     }
 
     private static HttpURLConnection createConnection(String url, String method, String authorization,
-            String content_type, Map<String, String> parameters) throws IOException {
+            String content_type, Map<String, String> parameters, Integer read_timeout,
+            Integer connect_timeout) throws IOException {
         HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
         conn.setRequestMethod(method);
         // first parameter has a ? before it, the rest have a & before them
@@ -144,8 +147,8 @@ class HttpClient {
         }
         conn.addRequestProperty("Authorization", authorization);
         conn.addRequestProperty("Content-Type", content_type);
-        conn.setConnectTimeout(10000);
-        conn.setReadTimeout(10000);
+        conn.setConnectTimeout(connect_timeout);
+        conn.setReadTimeout(read_timeout);
         conn.setDoOutput(true);
         conn.setDoInput(true);
         conn.setInstanceFollowRedirects(true);

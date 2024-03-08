@@ -10,10 +10,13 @@ PUT _ingest/pipeline/my-pipeline
       "ingest_rest": {
         "field": "foo",
         "target_field": "bar",
+        "endpoint":"https://control-plane-gateway-44gp1iu3.uc.gateway.dev/mcplusa/models/predict",
         "model_id": "7e009044-17cd-4132-b43f-cfd5cc5c61fd",
         "task": "named_entity_recognition",
         "content_type":"application/json",
-        "method": "POST"
+        "method": "POST",
+        "read_timeout": 100000,
+        "connect_timeout": 100000
 
       }
     }
