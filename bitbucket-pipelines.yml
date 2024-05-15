@@ -1,15 +1,26 @@
-#  Template Java Gradle build
-
-#  This template allows you to test and build your Java project with Gradle.
-#  The workflow allows running tests, code checkstyle and security scans on the default branch.
-
-# Prerequisites: appropriate project structure should exist in the repository.
-
-image: gradle:8.7.0
-
+image: 'gradle:8.7.0'
 pipelines:
-  default:
-    - parallel:
+  branches:
+    main:
+      - parallel:
+          - step:
+              name: Build and Test
+            caches:
+              - gradle
+            script:
+              - gradle build
+              - pipe: 'atlassian/bitbucket-upload-file:0.7.1'
+                variables:
+                  BITBUCKET_ACCESS_TOKEN: $BITBUCKET_ACCESS_TOKEN
+                  FILENAME: 'build/distributions/*.zip
+            after-script:
+              - pipe: 'atlassian/checkstyle-report:0.3.0'
+      - step:
+          name: Security Scan
+          script:
+            - pipe: 'atlassian/git-secrets-scan:0.5.1'
+    develop:
+      - parallel: null
       - step:
           name: Build and Test
           caches:
@@ -17,10 +28,8 @@ pipelines:
           script:
             - gradle build
           after-script:
-            - pipe: atlassian/checkstyle-report:0.3.0
+            - pipe: 'atlassian/checkstyle-report:0.3.0'
       - step:
           name: Security Scan
           script:
-            # Run a security scan for sensitive data.
-            # See more security tools at https://bitbucket.org/product/features/pipelines/integrations?&category=security
-            - pipe: atlassian/git-secrets-scan:0.5.1
+            - pipe: 'atlassian/git-secrets-scan:0.5.1'
