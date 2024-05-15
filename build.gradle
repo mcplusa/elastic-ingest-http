@@ -1,8 +1,8 @@
-ext.pluginApiVersion = '8.12.2'
+ext.pluginApiVersion = '8.13.1'
 ext.luceneVersion = '9.9.2'
 
 buildscript {
-  ext.pluginApiVersion = '8.12.2'
+  ext.pluginApiVersion = '8.13.1'
   repositories {
     mavenCentral()
   }
@@ -48,7 +48,7 @@ tasks.build {
 }
 
 group 'org.elasticsearch.plugin.ingest.rest'
-version '8.12.2'
+version '8.13.1'
 
 repositories {
   mavenLocal()
