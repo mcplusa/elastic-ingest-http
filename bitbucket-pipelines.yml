@@ -12,7 +12,7 @@ pipelines:
               - pipe: 'atlassian/bitbucket-upload-file:0.7.1'
                 variables:
                   BITBUCKET_ACCESS_TOKEN: $BITBUCKET_ACCESS_TOKEN
-                  FILENAME: 'build/distributions/*.zip
+                  FILENAME: build/distributions/*.zip
             after-script:
               - pipe: 'atlassian/checkstyle-report:0.3.0'
       - step:
@@ -20,7 +20,7 @@ pipelines:
           script:
             - pipe: 'atlassian/git-secrets-scan:0.5.1'
     develop:
-      - parallel: null
+      - parallel: n
       - step:
           name: Build and Test
           caches:
