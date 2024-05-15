@@ -5,7 +5,7 @@
 
 # Prerequisites: appropriate project structure should exist in the repository.
 
-image: gradle:6.6.0
+image: gradle:8.7.0
 
 pipelines:
   default:
