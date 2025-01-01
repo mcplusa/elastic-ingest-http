@@ -72,6 +72,10 @@ PUT _ingest/pipeline/my-pipeline
 
 If you are interested in commerical support a different license, contact [MC+A](https://mcplusa.com/).
 
+## Main Contributors
+* Steph van Schalkwyk [(Github)](https://github.com/svanschalkwyk)
+* Michael Cizmar [(Github)](https://github.com/michaelcizmar)
+
 ## License
 
-his project is licensed under the GNU AFFERO GENERAL PUBLIC LICENSE. See the [License](./LICENSE) file for more details.This is 
+his project is licensed under the GNU Affero General Public License. See the [License](./LICENSE) file for more details.
