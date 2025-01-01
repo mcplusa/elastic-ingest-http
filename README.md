@@ -1,6 +1,6 @@
 # Elasticsearch Ingest HTTP Plugin
 
-This is an Elasticsearch Ingest Pipeline Processor that calls an HTTP(s) endpoint and adds the the response back to the ingest document for further processing.
+This is an Elasticsearch Ingest Pipeline Processor that calls an HTTP(s) endpoint and adds the response back to the ingest document for further processing.
 
 This was intially developed for work with Bookend.AI.
 
